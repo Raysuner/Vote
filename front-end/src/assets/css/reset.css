@@ -1,0 +1,26 @@
+@import "normalize.css";
+
+ul, li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+.choice {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  background-color: #fff;
+  margin: 20px auto;
+}
+
+.choice > a {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
