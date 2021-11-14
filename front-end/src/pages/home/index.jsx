@@ -20,4 +20,10 @@ const HomeWrapper = styled.div`
   width: 800px;
   margin: 0 auto;
   background-color: lightblue;
+  .menu {
+    text-align: center;
+    a {
+      margin: 0 10px
+    }
+  }
 `

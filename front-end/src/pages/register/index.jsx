@@ -4,6 +4,6 @@ import UserForm from "src/components/user-form"
 
 export default memo(function Register() {
   return (
-    <UserForm name="注册"></UserForm>
+    <UserForm title="注册"></UserForm>
   )
 })

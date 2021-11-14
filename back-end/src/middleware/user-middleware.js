@@ -1,5 +1,5 @@
 const errorType = require("../app/error-types");
-const userService = require("../service/user_service")
+const userService = require("../service/user-service")
 const encryption = require("../utils/encryption")
 
 const verifyUser = async (ctx, next) => {

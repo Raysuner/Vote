@@ -1,8 +1,7 @@
 const jwt = require("jsonwebtoken")
 const errorType = require("../app/error-types")
-const userService = require("../service/user_service")
+const userService = require("../service/user-service")
 const encryption = require("../utils/encryption")
-const authService = require("../service/auth_service")
 const { PUBLIC_KEY } = require("../app/config")
 
 const verifyLogin = async (ctx, next) => {
@@ -37,6 +36,10 @@ const verifyAuth = async (ctx, next) => {
     try {
         // 获取token
         const authorization = ctx.headers.authorization
+        if (!authorization) {
+          const error = new Error(errorType.UNAUTHORIZATION)
+          return ctx.app.emit("error", error, ctx)
+        }
         const token = authorization.replace("Bearer ", "")
 
         // 验证token
@@ -64,19 +67,7 @@ const verifyAuth = async (ctx, next) => {
     }
 }
 
-const verifyPermission = async (ctx, next) => {
-    const { commentId } = ctx.params
-    const { id } = ctx.user
-    const isPermission = await authService.checkPermission(id, commentId)
-    if (!isPermission) {
-        const error = new Error(errorType.UNPERMISSION)
-        return ctx.app.emit("error", error, ctx)
-    }
-    await next()
-}
-
 module.exports = {
     verifyLogin,
     verifyAuth,
-    verifyPermission
 }

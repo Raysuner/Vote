@@ -6,6 +6,7 @@ import Mine from "../pages/mine"
 import Login from "../pages/login"
 import Register from "../pages/register"
 import Create from "../pages/create"
+import Vote from "../pages/vote"
 
 export const routes = [
   {
@@ -43,5 +44,9 @@ export const routes = [
   {
     path: "/create",
     component: Create
+  },
+  {
+    path: "/vote/:id",
+    component: Vote
   }
 ]

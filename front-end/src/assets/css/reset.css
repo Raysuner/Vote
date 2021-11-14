@@ -1,4 +1,5 @@
 @import "normalize.css";
+@import "antd/dist/antd.css";
 
 ul, li {
   margin: 0;

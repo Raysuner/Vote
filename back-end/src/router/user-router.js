@@ -2,14 +2,14 @@ const Router = require("koa-router")
 
 const {
     createUser
-} = require("../controller/user_controller")
+} = require("../controller/user-controller")
 
 const {
     verifyUser,
     handlePassword
-} = require("../middleware/user_middleware")
+} = require("../middleware/user-middleware")
 
-const userRouter = new Router({prefix: "/register"})
+const userRouter = new Router({prefix: "/account/register"})
 
 userRouter.post(
     "/",
