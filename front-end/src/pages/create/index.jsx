@@ -29,7 +29,7 @@ export default memo(function Create() {
     try {
       res = await createVote(voteInfo)
       const vote_id = res.data.insertId
-      history.push(`/vote/${vote_id}`)
+      history.push("/home/mine")
     } catch (error) {
       console.error("创建投票失败")
     }

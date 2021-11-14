@@ -11,7 +11,6 @@ export default memo(function Mine() {
   // const { isLogin } = useContext(LoginContext)
   const history = useHistory()
   const [res, setRes] = useState({data: []})
-
   // console.log("isLogin", isLogin)
   // if (!isLogin) {
   //   history.push("/login")
@@ -25,7 +24,7 @@ export default memo(function Mine() {
       <ul className="vote-title-list">
         {
           res.data.map(item => {
-            return <li key={item.id}><NavLink to="#">{item.title}</NavLink></li>
+            return <li key={item.id}><NavLink to={"/vote/" + item.id}>{item.title}</NavLink></li>
           })
         }
       </ul>
