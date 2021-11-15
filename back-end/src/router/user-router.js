@@ -9,7 +9,7 @@ const {
     handlePassword
 } = require("../middleware/user-middleware")
 
-const userRouter = new Router({prefix: "/account/register"})
+const userRouter = new Router({prefix: "/api/register"})
 
 userRouter.post(
     "/",

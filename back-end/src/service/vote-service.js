@@ -26,13 +26,40 @@ class voteService {
     return result
   }
 
-  async getVoteByVoteId(vote_id) {
-    const statement1 = `SELECT title, anony FROM vote WHERE id = ?`
-    const statement2 = `SELECT * FROM opt WHERE vote_id = ?`
+  async getVoteInfo(vote_id) {
+    const statement = `SELECT title, multiple, anony FROM vote WHERE id = ?`
+    const result = await database.execute(statement, [vote_id])
+    return result
+  }
 
-    let [result1] = await database.execute(statement1, [vote_id])
-    let [result2] = await database.execute(statement2, [vote_id])
-    return result1.concat(result2)
+  async getVoteOptions(vote_id) {
+    const statement = `SELECT * FROM opt WHERE vote_id = ?`
+    const result = await database.execute(statement, [vote_id])
+    return result
+  }
+
+  async isVotedOption(user_id, vote_id, option_id) {
+    const statement = `SELECT * FROM voteOption WHERE user_id = ? AND vote_id = ? AND option_id = ?`
+    const result = await database.execute(statement, [user_id, vote_id, option_id])
+    return result
+  }
+
+  async addOption(user_id, vote_id, option_id) {
+    const statement = `INSERT INTO voteOption(user_id, vote_id, option_id) VALUES(?, ?, ?)`
+    const result = await database.execute(statement, [user_id, vote_id, option_id])
+    return result
+  }
+
+  async deleteOption(user_id, vote_id, option_id) {
+    const statement = `DELETE FROM voteOption WHERE user_id = ? AND vote_id = ? AND option_id = ?`
+    const result = await database.execute(statement, [user_id, vote_id, option_id])
+    return result
+  }
+
+  async deleteReverseOption(user_id, vote_id, option_id) {
+    const statement = `DELETE FROM voteOption WHERE user_id = ? AND vote_id = ? AND option_id != ?`
+    const result = await database.execute(statement, [user_id, vote_id, option_id])
+    return result
   }
 }
 

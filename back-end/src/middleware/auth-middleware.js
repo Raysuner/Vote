@@ -6,7 +6,6 @@ const { PUBLIC_KEY } = require("../app/config")
 
 const verifyLogin = async (ctx, next) => {
     const { name, password } = ctx.request.body
-    // console.log(name, password)
 
     if (!name || !password) {
         const error = new Error(errorType.USERNAME_AND_PASSWORD_IS_REQUIRED)
@@ -15,8 +14,6 @@ const verifyLogin = async (ctx, next) => {
 
     const result = await userService.getUserByName(name)
     const user = result[0]
-    // console.log(user)
-
     if (!user) {
         const error = new Error(errorType.USER_NOT_EXIST)
         return ctx.app.emit("error", error, ctx)
@@ -36,7 +33,7 @@ const verifyAuth = async (ctx, next) => {
     try {
         // 获取token
         const authorization = ctx.headers.authorization
-        if (!authorization) {
+        if (authorization === "Bearer") {
           const error = new Error(errorType.UNAUTHORIZATION)
           return ctx.app.emit("error", error, ctx)
         }
@@ -55,9 +52,9 @@ const verifyAuth = async (ctx, next) => {
             ctx.user = result
             await next()
         }
-
     } catch (err) {
         if (err.sqlMessage) {
+            console.log("sqlMessage: ", err.sqlMessage)
             const error = new Error(errorType.DATABASE_ERROR)
             ctx.app.emit("error", error, ctx)
         }

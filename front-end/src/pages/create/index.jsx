@@ -25,10 +25,8 @@ export default memo(function Create() {
       multiple: queryParam === "1" ? true : false,
       options: array
     }
-    let res
     try {
-      res = await createVote(voteInfo)
-      const vote_id = res.data.insertId
+      await createVote(voteInfo)
       history.push("/home/mine")
     } catch (error) {
       console.error("创建投票失败")

@@ -18,7 +18,7 @@ request.interceptors.request.use(config => {
 
 export const login = (user) => {
   return request({
-    url: "/account/login",
+    url: "/api/login",
     method: "POST",
     data: user
   })
@@ -26,7 +26,7 @@ export const login = (user) => {
 
 export const register = user => {
   return request({
-    url: "/account/register",
+    url: "/api/register",
     method: "POST",
     data: user
   })
@@ -34,7 +34,7 @@ export const register = user => {
 
 export const createVote = info => {
   return request({
-    url: "/create-vote",
+    url: "/api/vote",
     method: "POST",
     data: info
   })
@@ -42,12 +42,18 @@ export const createVote = info => {
 
 export const getVoteByUser = () => {
   return request({
-    url: "/my-vote",
+    url: "/api/vote",
   })
 }
 
 export const getVoteByVoteId = voteId => {
   return request({
-    url: `/vote/${voteId}`,
+    url: `/api/vote/${voteId}`,
+  })
+}
+
+export const voteOption = (voteId, option) => {
+  return request({
+    url: `/api/vote/${voteId}/option/${option}`
   })
 }

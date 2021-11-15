@@ -2,7 +2,7 @@ const Router = require("koa-router")
 const authController = require("../controller/auth-controller")
 const authMiddleWare = require("../middleware/auth-middleware")
 
-const authRouter = new Router({prefix: "/account"})
+const authRouter = new Router({prefix: "/api"})
 
 authRouter.post(
     "/login",

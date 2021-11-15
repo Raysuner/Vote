@@ -4,7 +4,6 @@ const encryption = require("../utils/encryption")
 
 const verifyUser = async (ctx, next) => {
     const { name, password } = ctx.request.body
-    // console.log(name, password);
 
     if (!name || !password) {
         const error = new Error(errorType.USERNAME_AND_PASSWORD_IS_REQUIRED)
