@@ -16,7 +16,7 @@ request.interceptors.request.use(config => {
   Promise.reject(error)
 })
 
-export const login = (user) => {
+export const login = user => {
   return request({
     url: "/api/login",
     method: "POST",
@@ -54,6 +54,7 @@ export const getVoteByVoteId = voteId => {
 
 export const voteOption = (voteId, option) => {
   return request({
-    url: `/api/vote/${voteId}/option/${option}`
+    url: `/api/vote/${voteId}/option/${option}`,
+    method: "POST"
   })
 }

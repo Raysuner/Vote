@@ -6,7 +6,7 @@ import styled from "styled-components"
 
 export default memo(function Home({route}) {
   return (
-    <HomeWrapper>
+    <HomeWrapper className="home">
       { renderRoutes(route.routes) }
       <div className="menu">
         <NavLink to="/home/new">新建</NavLink>
@@ -19,7 +19,7 @@ export default memo(function Home({route}) {
 const HomeWrapper = styled.div`
   width: 800px;
   margin: 0 auto;
-  background-color: lightblue;
+  background-color: #f4f5f9;
   .menu {
     text-align: center;
     a {

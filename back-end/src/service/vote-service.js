@@ -20,14 +20,26 @@ class voteService {
     return result
   }
 
-  async getVoteByName(user_id) {
-    const statement = `SELECT * FROM vote WHERE user_id = ?`
-    const result = await database.execute(statement, [user_id])
+  async getVote(user_id) {
+    const statement = `SELECT * FROM vote`
+    const result = await database.execute(statement, [])
+    return result
+  }
+
+  async getVotedUsers(vote_id) {
+    const statement = `SELECT id, name FROM user WHERE id in(SELECT user_id FROM voteOption WHERE vote_id = ?)`
+    const result = await database.execute(statement, [vote_id])
+    return result
+  }
+
+  async getVoteStatus(vote_id) {
+    const statement = `SELECT * FROM voteOption WHERE vote_id = ?`
+    const result = await database.execute(statement, [vote_id])
     return result
   }
 
   async getVoteInfo(vote_id) {
-    const statement = `SELECT title, multiple, anony FROM vote WHERE id = ?`
+    const statement = `SELECT title, multiple, anony, deadline FROM vote WHERE id = ?`
     const result = await database.execute(statement, [vote_id])
     return result
   }
@@ -38,9 +50,15 @@ class voteService {
     return result
   }
 
-  async isVotedOption(user_id, vote_id, option_id) {
+  async isVotedMultiple(user_id, vote_id, option_id) {
     const statement = `SELECT * FROM voteOption WHERE user_id = ? AND vote_id = ? AND option_id = ?`
     const result = await database.execute(statement, [user_id, vote_id, option_id])
+    return result
+  }
+
+  async isVotedSingle(user_id, vote_id) {
+    const statement = `SELECT * FROM voteOption WHERE user_id = ? AND vote_id = ?`
+    const result = await database.execute(statement, [user_id, vote_id])
     return result
   }
 
@@ -56,9 +74,9 @@ class voteService {
     return result
   }
 
-  async deleteReverseOption(user_id, vote_id, option_id) {
-    const statement = `DELETE FROM voteOption WHERE user_id = ? AND vote_id = ? AND option_id != ?`
-    const result = await database.execute(statement, [user_id, vote_id, option_id])
+  async updateOption(user_id, vote_id, option_id) {
+    const statement = `UPDATE voteOption SET option_id = ? WHERE user_id = ? AND vote_id = ? AND option_id != ?`
+    const result = await database.execute(statement, [option_id, user_id, vote_id, option_id])
     return result
   }
 }

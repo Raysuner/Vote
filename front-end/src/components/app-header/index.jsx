@@ -12,7 +12,7 @@ export default memo(function AppHeader({title}) {
 })
 
 const AppHeaderWrapper = styled.header`
-  margin-bottom: 50px;
+  margin-bottom: 30px;
   .title {
     font-size: 20px;
     font-weight: 800;

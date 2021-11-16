@@ -1,6 +1,10 @@
 @import "normalize.css";
 @import "antd/dist/antd.css";
 
+html, body {
+  font: 14px/1.5 "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei","Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;
+}
+
 ul, li {
   margin: 0;
   padding: 0;
@@ -9,6 +13,12 @@ ul, li {
 
 a {
   text-decoration: none;
+}
+
+.App {
+  margin: 0 auto;
+  width: 800px;
+  background-color: #f4f5f9;
 }
 
 .choice {
