@@ -1,6 +1,15 @@
 @import "normalize.css";
 @import "antd/dist/antd.css";
 
+html::before {
+  content: '';
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: -1;
+  background: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%) no-repeat;
+}
+
 html, body {
   font: 14px/1.5 "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei","Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;
 }
@@ -15,16 +24,24 @@ a {
   text-decoration: none;
 }
 
+#root {
+  width: 100%;
+  height: 100%;
+}
+
 .App {
+  overflow: auto;
   margin: 0 auto;
-  width: 800px;
+  width: 60%;
+  height: 100%;
   background-color: #f4f5f9;
 }
 
 .choice {
   position: relative;
-  width: 200px;
-  height: 200px;
+  width: 25%;
+  height: 0;
+  padding-bottom: 25%;
   background-color: #fff;
   margin: 20px auto;
 }

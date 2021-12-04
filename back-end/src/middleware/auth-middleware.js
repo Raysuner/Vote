@@ -5,66 +5,65 @@ const encryption = require("../utils/encryption")
 const { PUBLIC_KEY } = require("../app/config")
 
 const verifyLogin = async (ctx, next) => {
-    const { name, password } = ctx.request.body
+  const { name, password } = ctx.request.body
 
-    if (!name || !password) {
-        const error = new Error(errorType.USERNAME_AND_PASSWORD_IS_REQUIRED)
-        return ctx.app.emit("error", error, ctx)
-    }
+  if (!name || !password) {
+    const error = new Error(errorType.USERNAME_AND_PASSWORD_IS_REQUIRED)
+    return ctx.app.emit("error", error, ctx)
+  }
 
-    const result = await userService.getUserByName(name)
-    const user = result[0]
-    if (!user) {
-        const error = new Error(errorType.USER_NOT_EXIST)
-        return ctx.app.emit("error", error, ctx)
-    }
+  const result = await userService.getUserByName(name)
+  const user = result[0]
+  if (!user) {
+    const error = new Error(errorType.USER_NOT_EXIST)
+    return ctx.app.emit("error", error, ctx)
+  }
 
-    if (encryption.encryptionPassword(password) !== user.password) {
-        const error = new Error(errorType.PASSWORD_IS_NOT_CORRECT)
-        return ctx.app.emit("error", error, ctx)
-    }
+  if (encryption.encryptionPassword(password) !== user.password) {
+    const error = new Error(errorType.PASSWORD_IS_NOT_CORRECT)
+    return ctx.app.emit("error", error, ctx)
+  }
 
-    ctx.user = user
+  ctx.user = user
 
-    await next()
+  await next()
 }
 
 const verifyAuth = async (ctx, next) => {
-    try {
-        // 获取token
-        const authorization = ctx.headers.authorization
-        if (authorization === "Bearer") {
-          const error = new Error(errorType.UNAUTHORIZATION)
-          return ctx.app.emit("error", error, ctx)
-        }
-        const token = authorization.replace("Bearer ", "")
-
-        // 验证token
-        const result = jwt.verify(token, PUBLIC_KEY, {
-            algorithms: ["RS256"]
-        })
-
-        if(!result){
-            const error = new Error(errorType.UNAUTHORIZATION)
-            ctx.app.emit("error", error, ctx)
-        }
-        else {
-            ctx.user = result
-            await next()
-        }
-    } catch (err) {
-        if (err.sqlMessage) {
-            console.log("sqlMessage: ", err.sqlMessage)
-            const error = new Error(errorType.DATABASE_ERROR)
-            ctx.app.emit("error", error, ctx)
-        }
-        else {
-            throw err
-        }
+  try {
+    // 获取token
+    const authorization = ctx.headers.authorization
+    if (!authorization || authorization === "Bearer") {
+      const error = new Error(errorType.UNAUTHORIZATION)
+      return ctx.app.emit("error", error, ctx)
     }
+    const token = authorization.replace("Bearer ", "")
+
+    // 验证token
+    const result = jwt.verify(token, PUBLIC_KEY, { algorithms: ["RS256"] })
+    console.log("verify token result: ", result)
+
+    if (!result) {
+      const error = new Error(errorType.UNAUTHORIZATION)
+      ctx.app.emit("error", error, ctx)
+    }
+    else {
+      ctx.user = result
+      await next()
+    }
+  } catch (err) {
+    if (err.sqlMessage) {
+      console.log("sqlMessage: ", err.sqlMessage)
+      const error = new Error(errorType.DATABASE_ERROR)
+      ctx.app.emit("error", error, ctx)
+    }
+    else {
+      throw err
+    }
+  }
 }
 
 module.exports = {
-    verifyLogin,
-    verifyAuth,
+  verifyLogin,
+  verifyAuth,
 }

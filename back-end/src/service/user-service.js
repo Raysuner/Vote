@@ -10,7 +10,7 @@ class UserService  {
     }
 
     async getUserByName(name) {
-        const statement = `SELECT * FROM user WHERE name = ?;`
+        const statement = `SELECT id, name, avatar, password FROM user WHERE name = ?;`
         const result = await database.execute(statement, [name])
 
         return result[0]

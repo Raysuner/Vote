@@ -11,9 +11,9 @@ authRouter.post(
 )
 
 authRouter.get(
-    "/test",
+    "/login-user",
     authMiddleWare.verifyAuth,
-    authController.authSuccess
+    authController.getLoginUser
 )
 
 module.exports = authRouter

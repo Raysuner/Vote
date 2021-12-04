@@ -1,6 +1,6 @@
-import {Redirect} from "react-router-dom"
+import { Redirect } from "react-router-dom"
 
-import Home from "../pages/home"
+import Main from "../pages/main"
 import New from "../pages/new"
 import Mine from "../pages/mine"
 import Login from "../pages/login"
@@ -12,23 +12,23 @@ export const routes = [
   {
     path: "/",
     exact: true,
-    render: () => <Redirect to="/home/new" />
+    render: () => <Redirect to="/main/new" />
   },
   {
-    path: "/home",
-    component: Home,
+    path: "/main",
+    component: Main,
     routes: [
       {
-        path: "/home",
+        path: "/main",
         exact: true,
-        render: () => <Redirect to="/home/new" />
+        render: () => <Redirect to="/main/new" />
       },
       {
-        path: "/home/new",
+        path: "/main/new",
         component: New
       },
       {
-        path: "/home/mine",
+        path: "/main/mine",
         component: Mine
       }
     ]

@@ -1,20 +1,15 @@
-import { memo, useEffect, useContext, useState } from 'react'
-import { NavLink, useHistory } from "react-router-dom"
+import { memo, useEffect, useState } from "react"
+import { NavLink } from "react-router-dom"
 
 import styled from "styled-components"
 
-import { LoginContext } from "src/common/context/context"
+import WithCheckLogin from "src/utils/hoc.js"
 import { getVoteByUser } from "src/utils/request"
 import AppHeader from "src/components/app-header"
 
-export default memo(function Mine() {
-  // const { isLogin } = useContext(LoginContext)
-  const history = useHistory()
-  const [res, setRes] = useState({data: []})
-  // console.log("isLogin", isLogin)
-  // if (!isLogin) {
-  //   history.push("/login")
-  // }
+function Mine() {
+  // const history = useHistory()
+  const [res, setRes] = useState({ data: [] })
   useEffect(() => {
     getVoteByUser().then(setRes)
   }, [])
@@ -22,24 +17,30 @@ export default memo(function Mine() {
     <MineWrapper>
       <AppHeader title="我的投票"></AppHeader>
       <ul className="vote-title-list">
-        {
-          res.data.map(item => {
-            return <li key={item.id}><NavLink to={"/vote/" + item.id}>{item.title}</NavLink></li>
-          })
-        }
+        {res.data.map((item) => {
+          return (
+            <li key={item.id}>
+              <NavLink to={"/vote/" + item.id}>{item.title}</NavLink>
+            </li>
+          )
+        })}
       </ul>
     </MineWrapper>
   )
-})
+}
+
+export default WithCheckLogin(memo(Mine))
 
 const MineWrapper = styled.div`
+  margin: 0 100px;
   .vote-title-list {
     margin-bottom: 50px;
     li {
-      margin: 15px 0;
+      margin: 15px;
       a {
-        width: 200px;
         display: block;
+        padding: 10px 20px;
+        white-space: nowrap;
         margin: 0 auto;
         text-align: center;
         background-color: #fff;
@@ -47,4 +48,3 @@ const MineWrapper = styled.div`
     }
   }
 `
-

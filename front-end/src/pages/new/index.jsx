@@ -1,14 +1,15 @@
-import { memo } from 'react'
+import { memo } from "react"
 import { Link } from "react-router-dom"
 
 import styled from "styled-components"
 
 import AppHeader from "src/components/app-header"
 
-export default memo(function New() {
+
+function New() {
   return (
     <NewWrapper>
-      <AppHeader title="腾讯投票"/>
+      <AppHeader title="腾讯投票" />
       <div className="choice single-choice">
         <Link to="/create">单选</Link>
       </div>
@@ -17,7 +18,8 @@ export default memo(function New() {
       </div>
     </NewWrapper>
   )
-})
+}
 
-const NewWrapper = styled.div`
-`
+export default memo(New)
+
+const NewWrapper = styled.div``

@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const request = axios.create({
+export const request = axios.create({
   baseURL: "http://localhost:3000",
   timeout: 5000
 })
@@ -29,6 +29,12 @@ export const register = user => {
     url: "/api/register",
     method: "POST",
     data: user
+  })
+}
+
+export const getLoginUser = () => {
+  return request({
+    url: "/api/login-user"
   })
 }
 

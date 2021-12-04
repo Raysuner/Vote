@@ -1,8 +1,8 @@
-import { memo } from 'react'
+import { memo } from "react"
 
 import styled from "styled-components"
 
-export default memo(function AppHeader({title}) {
+export default memo(function AppHeader({ title }) {
   return (
     <AppHeaderWrapper>
       <i className="icon"></i>

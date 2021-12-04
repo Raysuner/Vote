@@ -1,19 +1,18 @@
 import { HashRouter } from "react-router-dom"
 import { renderRoutes } from "react-router-config"
 
-import { routes } from "./router";
-import { LoginContext } from "./common/context/context"
+import { routes } from "./router"
+
+import LoginContext from "./components/login-context"
 
 function App() {
   return (
     <HashRouter>
-      {/* <LoginContext.Provider value={{ isLogin: false }}> */}
-        <div className="App">
-          {renderRoutes(routes)}
-        </div>
-      {/* </LoginContext.Provider> */}
+      <LoginContext>
+        <div className="App">{renderRoutes(routes)}</div>
+      </LoginContext>
     </HashRouter>
-  );
+  )
 }
 
-export default App;
+export default App

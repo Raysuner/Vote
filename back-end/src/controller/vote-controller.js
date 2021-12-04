@@ -1,5 +1,6 @@
 const errorTypes = require("../app/error-types")
 const voteService = require("../service/vote-service")
+const voteMap = require("../main")
 
 class VoteController {
   async createVote(ctx, next) {
@@ -17,10 +18,10 @@ class VoteController {
   async getVoteByVoteId(ctx, next) {
     const vote_id = ctx.params.id
     const [info] = await voteService.getVoteInfo(vote_id)
-    const [voted] = await voteService.getVoteStatus(vote_id)
     const [options] = await voteService.getVoteOptions(vote_id)
-    const [users] = await voteService.getVotedUsers(vote_id)
-    ctx.body = {info: info[0], voted, options, users}
+    const [voted] = await voteService.getVoteStatus(vote_id)
+
+    ctx.body = {info, options, voted}
   }
 
   async voteOption(ctx, next) {
@@ -29,18 +30,23 @@ class VoteController {
     let result = null
 
     const [voteInfo] = await voteService.getVoteInfo(vote_id)
-    if (voteInfo.length) { // 查看是否有这个投票
-      const multiple = voteInfo[0].multiple
+    //判断是否已经过了截止日期
+    // if (Date.now() > new Date(voteInfo.deadline).getTime()) {
+    //   const error = new Error(errorTypes.DEADLINE_PASSED)
+    //   return ctx.app.emit("error", error, ctx)
+    // }
+    if (voteInfo) { // 查看是否有这个投票
+      const multiple = voteInfo.multiple
       if (multiple === "1") {  // 是否是多选
-        const [voted] = await voteService.isVotedMultiple(user_id, vote_id, option_id)
-        if (voted.length) {  // 是否已经选过
+        const [voted = undefined] = await voteService.isVotedMultiple(user_id, vote_id, option_id)
+        if (voted) {  // 是否投递过选项
           result = await voteService.deleteOption(user_id, vote_id, option_id)
         } else {
           result = await voteService.addOption(user_id, vote_id, option_id)
         }
       } else {
-        const [voted] = await voteService.isVotedSingle(user_id, vote_id)
-        if (voted.length) {
+        const [voted = undefined] = await voteService.isVotedSingle(user_id, vote_id)
+        if (voted) { // 是否投递过选项
           if (voted.option_id === option_id) {
             result = await voteService.deleteOption(user_id, vote_id, option_id)
           } else {
@@ -50,8 +56,14 @@ class VoteController {
           result = await voteService.addOption(user_id, vote_id, option_id)
         }
       }
+      const [voted] = await voteService.getVoteStatus(vote_id)
+      if (voteMap && voteMap[vote_id]) {
+        voteMap[vote_id].forEach(ws => {
+          ws.send(JSON.stringify(voted))
+        })
+      }
     }
-    ctx.body = result[0]
+    ctx.body = result
   }
 }
 

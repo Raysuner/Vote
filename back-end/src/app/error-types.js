@@ -9,6 +9,7 @@ const CAN_NOT_GET_COMMENT_SIZE_WITH_QUERY = "can_not_get_comment_size_with_query
 const CAN_NOT_GET_CORRECT_PARAMS = "can_not_get_correct_params"
 const UNPERMISSION = "unpermission"
 const UPDATA_COMMENT_FAILED = "update_comment_failed"
+const DEADLINE_PASSED = "deadline_passed"
 
 module.exports = {
     USERNAME_AND_PASSWORD_IS_REQUIRED,
@@ -22,4 +23,5 @@ module.exports = {
     CAN_NOT_GET_COMMENT_SIZE_WITH_QUERY,
     UNPERMISSION,
     UPDATA_COMMENT_FAILED,
+    DEADLINE_PASSED,
 }
