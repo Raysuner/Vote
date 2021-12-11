@@ -67,45 +67,46 @@ export function useQuery(param) {
   return search.get(param)
 }
 
-// export function useAxios(config) {
-//   const [loading, setLoading] = useState(true)
-//   const [error, setError] = useState()
-//   const [data, setData] = useState()
-//   const [count, setCount] = useState(0)
+export function useAxios(config) {
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState()
+  const [data, setData] = useState()
+  const [count, setCount] = useState(0)
 
-//   useEffect(() => {
-//     const CancelToken = axios.CancelToken
-//     const source = cancelToken.source()
-//     const request = axios({
-//       ...config,
-//       cancelToken: source.token,
-//       timeout: 5000
-//     })
+  useEffect(() => {
+    const CancelToken = axios.CancelToken
+    const source = cancelToken.source()
+    const request = axios({
+      ...config,
+      cancelToken: source.token,
+      timeout: 5000
+    })
 
-//     request.then(res => {
-//       if (res.data.errorMsg) {
-//         setError(res.data)
-//         setData(null)
-//       } else {
-//         setError(null)
-//         setData(res.data)
-//       }
-//       setLoading(false)
-//     }, err => {
-//       if (axios.isCancel(err)) {
-//         console.error("Request canceled", err.message)
-//       } else {
-//         console.error("Request Failed")
-//       }
-//       setError(err.message)
-//       setLoading(false)
-//     })
+    const fetchData = async () => {
+      setError(null)
+      setLoading(true)
+      try {
+        const result = await axios({
+          ...config,
+          cancelToken: source.token,
+          timeout: 5000
+        })
+        setData(result)
+      } catch (err) {
+        setError(err)
+      }
+      setLoading(false)
+    }
 
-//     const update = useCallback(() => {
-//       setCount(count => count + 1)
-//     }, [])
-//   }, [config.url])
-// }
+    fetchData()
+
+    const update = useCallback(() => {
+      setCount(count => count + 1)
+    }, [])
+  }, [config.url, count])
+
+  return () => source.cancle()
+}
 
 export function useUser() {
   return useContext(UserContext)
