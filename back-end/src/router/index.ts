@@ -1,9 +1,9 @@
-const fsp = require("fs/promises")
+import fsp from "fs/promises"
 
-async function useAllRoutes() {
+export async function useAllRoutes() {
     const files = await fsp.readdir(__dirname)
     for (const file of files) {
-        if (file === "index.js") {
+        if (file === "index.ts") {
             continue
         }
         const router = require(`./${file}`)
@@ -11,5 +11,3 @@ async function useAllRoutes() {
         this.use(router.allowedMethods())
     }
 }
-
-module.exports = useAllRoutes

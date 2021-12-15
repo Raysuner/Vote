@@ -1,7 +1,7 @@
-const { WebSocketServer } = require("ws")
+import { WebSocketServer } from "ws"
 
-const app = require('./app/index')
-const config = require('./app/config')
+import app from './app/index'
+import config from './app/config'
 
 const server = app.listen(config.APP_PORT, () => {
   console.log(`服务器启动成功 ${config.APP_PORT}`)
@@ -22,7 +22,12 @@ wss.on("connection", (ws, req) => {
       voteMap[voteId] = [ws]
     }
     ws.on("close", () => {
-      const idx = voteMap[voteId].indexOf(ws)
+      // let idx = -1
+      // while ((idx = voteMap[voteId].indexOf(ws)) > -1) {
+      //   console.log(idx)
+      //   voteMap[voteId].splice(idx, 1)
+      // }
+      const idx = voteMap[voteId].indexOf(ws) // 网络卡顿时，连续点击两次会创建两个，删除一个还会遗留一个
       if (idx > -1) {
         voteMap[voteId].splice(idx, 1)
       } else {
@@ -30,6 +35,7 @@ wss.on("connection", (ws, req) => {
       }
     })
   } else {
+    console.log("ws to be closed")
     ws.close()
   }
 })

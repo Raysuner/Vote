@@ -1,7 +1,8 @@
-const errorType = require('./error-types')
+import { BaseContext } from "koa"
+import * as errorType from './error-types'
 
-function errorHandler(error, ctx) {
-  let status, message
+export function errorHandler(error: Error, ctx: BaseContext) {
+  let status: number, message: Object
   switch (error.message) {
     case errorType.USERNAME_AND_PASSWORD_IS_REQUIRED:
       status = 400
@@ -49,8 +50,4 @@ function errorHandler(error, ctx) {
   }
   ctx.status = status
   ctx.body = message
-}
-
-module.exports = {
-  errorHandler,
 }

@@ -1,21 +1,22 @@
-const errorTypes = require("../app/error-types")
-const voteService = require("../service/vote-service")
-const voteMap = require("../main")
+import { voteService } from "../service/vote-service"
+import voteMap from "../main"
+import { Context } from "koa"
 
 class VoteController {
-  async createVote(ctx, next) {
+  // 创建一个投票
+  async createVote(ctx: Context, next: () => Promise<any>) {
     const voteInfo = ctx.request.body
     const user_id = ctx.user.id
     const result = await voteService.createVote(voteInfo, user_id)
     ctx.body = result
   }
 
-  async getVote(ctx, next) {
-    const [result] = await voteService.getVote()
+  async getMyVote(ctx: Context, next: () => Promise<any>) {
+    const [result] = await voteService.getMyVote()
     ctx.body = result
   }
 
-  async getVoteByVoteId(ctx, next) {
+  async getVoteByVoteId(ctx: Context, next: () => Promise<any>) {
     const vote_id = ctx.params.id
     const [info] = await voteService.getVoteInfo(vote_id)
     const [options] = await voteService.getVoteOptions(vote_id)
@@ -58,6 +59,7 @@ class VoteController {
       }
       const [voted] = await voteService.getVoteStatus(vote_id)
       if (voteMap && voteMap[vote_id]) {
+        console.log(Object.entries(voteMap))
         voteMap[vote_id].forEach(ws => {
           ws.send(JSON.stringify(voted))
         })
@@ -67,4 +69,4 @@ class VoteController {
   }
 }
 
-module.exports = new VoteController()
+export default new VoteController()
