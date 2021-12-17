@@ -9,26 +9,28 @@ import {
   UNAUTHORIZATION,
   DATABASE_ERROR
 } from "../app/error-types"
-import { userService } from "../service/user-service"
 import { PUBLIC_KEY } from "../app/config"
-import encryption from "../utils/encryption"
+import { encryptionPassword } from "../utils/encryption"
+import { User } from "../common/interface"
+import { userService } from "../service/user-service"
 
 export const verifyLogin = async (ctx: Context, next: () => Promise<any>) => {
-  const { name, password }: {name: string, password: string} = ctx.request.body
+  const { name, password }: User = ctx.request.body
 
   if (!name || !password) {
     const error: Error = new Error(USERNAME_AND_PASSWORD_IS_REQUIRED)
     return ctx.app.emit("error", error, ctx)
   }
 
-  const result = await userService.getUserByName(name)
-  const user = result[0]
+  //@ts-ignore
+  const [user] = await userService.getUserByName(name)
+
   if (!user) {
     const error = new Error(USER_NOT_EXIST)
     return ctx.app.emit("error", error, ctx)
   }
 
-  if (encryption.encryptionPassword(password) !== user.password) {
+  if (encryptionPassword(password) !== user.password) {
     const error = new Error(PASSWORD_IS_NOT_CORRECT)
     return ctx.app.emit("error", error, ctx)
   }
@@ -41,7 +43,7 @@ export const verifyLogin = async (ctx: Context, next: () => Promise<any>) => {
 export const verifyAuth = async (ctx: Context, next: () => Promise<any>) => {
   try {
     // 获取token
-    const authorization: string = ctx.headers.authorization
+    const authorization: string | undefined = ctx.headers.authorization
     if (!authorization || authorization === "Bearer") {
       const error: Error = new Error(UNAUTHORIZATION)
       return ctx.app.emit("error", error, ctx)
@@ -61,7 +63,10 @@ export const verifyAuth = async (ctx: Context, next: () => Promise<any>) => {
       await next()
     }
   } catch (err) {
+    // @ts-ignore
     if (err.sqlMessage) {
+      console.log("sql err", err)
+      // @ts-ignore
       console.log("sqlMessage: ", err.sqlMessage)
       const error: Error = new Error(DATABASE_ERROR)
       ctx.app.emit("error", error, ctx)

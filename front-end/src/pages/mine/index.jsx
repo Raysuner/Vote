@@ -1,23 +1,25 @@
-import { memo, useEffect, useState } from "react"
+import { memo } from "react"
 import { NavLink } from "react-router-dom"
 
 import styled from "styled-components"
 
+import { getVotesByUser } from "src/utils/request"
+import { useAxios } from "src/utils/hooks"
 import WithCheckLogin from "src/utils/hoc.js"
-import { getVoteByUser } from "src/utils/request"
 import AppHeader from "src/components/app-header"
 
 function Mine() {
-  // const history = useHistory()
-  const [res, setRes] = useState({ data: [] })
-  useEffect(() => {
-    getVoteByUser().then(setRes)
-  }, [])
+  const { loading, response } = useAxios(getVotesByUser()) // /api/vote
+
+  if (loading) {
+    return null
+  }
+
   return (
     <MineWrapper>
       <AppHeader title="我的投票"></AppHeader>
       <ul className="vote-title-list">
-        {res.data.map((item) => {
+        {response.map((item) => {
           return (
             <li key={item.id}>
               <NavLink to={"/vote/" + item.id}>{item.title}</NavLink>

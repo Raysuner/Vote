@@ -1,83 +1,83 @@
 import {db} from "../app/database"
 
 class VoteService {
-  async createVote(voteInfo: Object, user_id: number) {
+  async createVote(voteInfo: Object, userId: number) {
     const voteStatement: string = `INSERT INTO
-      vote(user_id, title, descr, deadline, anony, multiple)
+      vote(userId, title, descr, deadline, anony, multiple)
       VALUES(?, ?, ?, ?, ?, ?)
     `
-    const optionStatement: string = `INSERT INTO opt(vote_id, content) VALUES(?, ?)`
+    const optionStatement: string = `INSERT INTO opt(voteId, content) VALUES(?, ?)`
 
-    const info = [user_id].concat(Object.values(voteInfo))
+    const info = [userId].concat(Object.values(voteInfo))
     const options = info.pop()
 
     const [result] = await db.execute(voteStatement, info)
     // @ts-ignore
-    const vote_id = result.insertId
+    const voteId = result.insertId
 
     // @ts-ignore
     for (const option of options) {
-      await db.execute(optionStatement, [vote_id, option])
+      await db.execute(optionStatement, [voteId, option])
     }
     return result
   }
 
-  async getVote(user_id: number) {
-    const statement = `SELECT * FROM vote WHERE user_id = ?`
-    const result = await db.execute(statement, [user_id])
+  async getMyVote(userId: number) {
+    const statement = `SELECT * FROM vote WHERE userId = ?`
+    const [result] = await db.execute(statement, [userId])
     return result
   }
 
   //用户为当前投票的投票情况
-  async getVoteStatus(vote_id: number) {
+  async getVoteStatus(voteId: number) {
     const statement = `
-      SELECT voteoption.id, user_id, option_id, avatar FROM voteoption JOIN user on user.id = voteoption.user_id WHERE vote_id = ?
+      SELECT voteoption.id, userId, optionId, avatar FROM voteoption JOIN user on user.id = voteoption.userId WHERE voteId = ?
     `
-    const result = await db.execute(statement, [vote_id])
+    const result = await db.execute(statement, [voteId])
     return result
   }
 
   //获取单个投票信息
-  async getVoteInfo(vote_id: number) {
+  async getVoteInfo(voteId: number) {
     const statement = `SELECT title, multiple, anony, deadline FROM vote WHERE id = ?`
-    const [result] = await db.execute(statement, [vote_id])
+    const [result] = await db.execute(statement, [voteId])
     return result
   }
 
   //获取单个投票所有投票选项
-  async getVoteOptions(vote_id: number) {
-    const statement = `SELECT id, vote_id, content FROM opt WHERE vote_id = ?`
-    const result = await db.execute(statement, [vote_id])
+  async getVoteOptions(voteId: number) {
+    const statement = `SELECT id, voteId, content FROM opt WHERE voteId = ?`
+    const result = await db.execute(statement, [voteId])
     return result
   }
 
-  async isVotedMultiple(user_id: number, vote_id: number, option_id: number) {
-    const statement = `SELECT * FROM voteOption WHERE user_id = ? AND vote_id = ? AND option_id = ?`
-    const [result] = await db.execute(statement, [user_id, vote_id, option_id])
+  async isVotedMultiple(userId: number, voteId: number, optionId: number) {
+    const statement = `SELECT * FROM voteOption WHERE userId = ? AND voteId = ? AND optionId = ?`
+    const [result] = await db.execute(statement, [userId, voteId, optionId])
     return result
   }
 
-  async isVotedSingle(user_id: number, vote_id: number) {
-    const statement = `SELECT * FROM voteOption WHERE user_id = ? AND vote_id = ?`
-    const [result] = await db.execute(statement, [user_id, vote_id])
+  async isVotedSingle(userId: number, voteId: number) {
+    const statement = `SELECT * FROM voteOption WHERE userId = ? AND voteId = ?`
+    const [result] = await db.execute(statement, [userId, voteId])
     return result
   }
 
-  async addOption(user_id: number, vote_id: number, option_id: number) {
-    const statement = `INSERT INTO voteOption(user_id, vote_id, option_id) VALUES(?, ?, ?)`
-    const [result] = await db.execute(statement, [user_id, vote_id, option_id])
+  async addOption(userId: number, voteId: number, optionId: number) {
+    const statement = `INSERT INTO voteOption(userId, voteId, optionId) VALUES(?, ?, ?)`
+    const [result] = await db.execute(statement, [userId, voteId, optionId])
     return result
   }
 
-  async deleteOption(user_id: number, vote_id: number, option_id: number) {
-    const statement = `DELETE FROM voteOption WHERE user_id = ? AND vote_id = ? AND option_id = ?`
-    const [result] = await db.execute(statement, [user_id, vote_id, option_id])
+  async deleteOption(userId: number, voteId: number, optionId: number) {
+    const statement = `DELETE FROM voteOption WHERE userId = ? AND voteId = ? AND optionId = ?`
+    const [result] = await db.execute(statement, [userId, voteId, optionId])
     return result
   }
 
-  async updateOption(user_id: number, vote_id: number, option_id: number) {
-    const statement = `UPDATE voteOption SET option_id = ? WHERE user_id = ? AND vote_id = ? AND option_id != ?`
-    const [result] = await db.execute(statement, [option_id, user_id, vote_id, option_id])
+  async updateOption(userId: number, voteId: number, optionId: number) {
+    const statement = `UPDATE voteOption SET optionId = ? WHERE userId = ? AND voteId = ? AND optionId != ?`
+    const [result] = await db.execute(statement, [optionId, userId, voteId, optionId])
     return result
   }
 }

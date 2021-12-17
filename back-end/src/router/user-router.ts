@@ -4,9 +4,9 @@ import { userController } from "../controller/user-controller"
 
 import { verifyUser, handlePassword } from "../middleware/user-middleware"
 
-export const userRouter: Router = new Router({prefix: "/api/register"})
+export const router: Router = new Router({prefix: "/api/register"})
 
-userRouter.post(
+router.post(
     "/",
     verifyUser,
     handlePassword,

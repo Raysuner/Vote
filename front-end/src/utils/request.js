@@ -8,7 +8,7 @@ export const request = axios.create({
 request.interceptors.request.use(config => {
   const user = window.localStorage.getItem("user")
   if (user) {
-    let token = JSON.parse(user).token
+    const token = JSON.parse(user).token
     config.headers['Authorization'] = `Bearer ${token}`
   }
   return config
@@ -17,50 +17,50 @@ request.interceptors.request.use(config => {
 })
 
 export const login = user => {
-  return request({
+  return {
     url: "/api/login",
     method: "POST",
     data: user
-  })
+  }
 }
 
 export const register = user => {
-  return request({
+  return {
     url: "/api/register",
     method: "POST",
     data: user
-  })
+  }
 }
 
 export const getLoginUser = () => {
-  return request({
+  return {
     url: "/api/login-user"
-  })
+  }
 }
 
 export const createVote = info => {
-  return request({
+  return {
     url: "/api/vote",
     method: "POST",
     data: info
-  })
+  }
 }
 
-export const getVoteByUser = () => {
-  return request({
+export const getVotesByUser = () => {
+  return {
     url: "/api/vote",
-  })
+  }
 }
 
 export const getVoteByVoteId = voteId => {
-  return request({
+  return {
     url: `/api/vote/${voteId}`,
-  })
+  }
 }
 
 export const voteOption = (voteId, option) => {
-  return request({
+  return {
     url: `/api/vote/${voteId}/option/${option}`,
     method: "POST"
-  })
+  }
 }

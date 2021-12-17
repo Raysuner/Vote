@@ -5,7 +5,7 @@ import {
   USER_ALREADY_EXIST
 } from "../app/error-types";
 import { userService } from "../service/user-service";
-import encryption from "../utils/encryption";
+import { encryptionPassword } from "../utils/encryption";
 
 export const verifyUser = async (ctx: Context, next: () => Promise<any>) => {
     const { name, password } = ctx.request.body
@@ -16,6 +16,7 @@ export const verifyUser = async (ctx: Context, next: () => Promise<any>) => {
     }
 
     const result = await userService.getUserByName(name)
+    // @ts-ignore
     if (result.length) {
         const error = new Error(USER_ALREADY_EXIST)
         return ctx.app.emit("error", error, ctx)
@@ -25,7 +26,7 @@ export const verifyUser = async (ctx: Context, next: () => Promise<any>) => {
 
 export const handlePassword = async (ctx: Context, next: () => Promise<any>) => {
     let {password} = ctx.request.body
-    password = encryption.encryptionPassword(password)
+    password = encryptionPassword(password)
     ctx.request.body.password = password
     await next()
 }

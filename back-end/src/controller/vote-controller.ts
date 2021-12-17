@@ -1,66 +1,72 @@
 import { voteService } from "../service/vote-service"
-import voteMap from "../main"
+import { DEADLINE_PASSED } from "../app/error-types"
+import { voteMap } from "../main"
 import { Context } from "koa"
 
 class VoteController {
   // 创建一个投票
   async createVote(ctx: Context, next: () => Promise<any>) {
     const voteInfo = ctx.request.body
-    const user_id = ctx.user.id
-    const result = await voteService.createVote(voteInfo, user_id)
+    const userId = ctx.user.id
+    const result = await voteService.createVote(voteInfo, userId)
     ctx.body = result
   }
 
   async getMyVote(ctx: Context, next: () => Promise<any>) {
-    const [result] = await voteService.getMyVote()
+    const userId = ctx.user.id
+    const result = await voteService.getMyVote(userId)
     ctx.body = result
   }
 
   async getVoteByVoteId(ctx: Context, next: () => Promise<any>) {
-    const vote_id = ctx.params.id
-    const [info] = await voteService.getVoteInfo(vote_id)
-    const [options] = await voteService.getVoteOptions(vote_id)
-    const [voted] = await voteService.getVoteStatus(vote_id)
+    const { voteId } = ctx.params
+    // @ts-ignore
+    const [info] = await voteService.getVoteInfo(voteId)
+    const [options] = await voteService.getVoteOptions(voteId)
+    const [voted] = await voteService.getVoteStatus(voteId)
 
     ctx.body = {info, options, voted}
   }
 
-  async voteOption(ctx, next) {
-    const user_id = ctx.user.id
-    const {vote_id, option_id} = ctx.params
-    let result = null
+  async voteOption(ctx: Context, next: () => Promise<any>) {
+    const userId: number = ctx.user.id
+    const {voteId, optionId}: {voteId: number, optionId: number} = ctx.params
+    let result: unknown = null
 
-    const [voteInfo] = await voteService.getVoteInfo(vote_id)
-    //判断是否已经过了截止日期
+    // @ts-ignore
+    const [voteInfo] = await voteService.getVoteInfo(voteId)
+    // 判断是否已经过了截止日期
     // if (Date.now() > new Date(voteInfo.deadline).getTime()) {
-    //   const error = new Error(errorTypes.DEADLINE_PASSED)
+    //   const error = new Error(DEADLINE_PASSED)
     //   return ctx.app.emit("error", error, ctx)
     // }
     if (voteInfo) { // 查看是否有这个投票
-      const multiple = voteInfo.multiple
+      const multiple: string = voteInfo.multiple
       if (multiple === "1") {  // 是否是多选
-        const [voted = undefined] = await voteService.isVotedMultiple(user_id, vote_id, option_id)
+        // @ts-ignore
+        const [voted = undefined] = await voteService.isVotedMultiple(userId, voteId, optionId)
         if (voted) {  // 是否投递过选项
-          result = await voteService.deleteOption(user_id, vote_id, option_id)
+          result = await voteService.deleteOption(userId, voteId, optionId)
         } else {
-          result = await voteService.addOption(user_id, vote_id, option_id)
+          result = await voteService.addOption(userId, voteId, optionId)
         }
       } else {
-        const [voted = undefined] = await voteService.isVotedSingle(user_id, vote_id)
+        // @ts-ignore
+        const [voted = undefined] = await voteService.isVotedSingle(userId, voteId)
         if (voted) { // 是否投递过选项
-          if (voted.option_id === option_id) {
-            result = await voteService.deleteOption(user_id, vote_id, option_id)
+          if (voted.optionId === optionId) {
+            result = await voteService.deleteOption(userId, voteId, optionId)
           } else {
-            result = await voteService.updateOption(user_id, vote_id, option_id)
+            result = await voteService.updateOption(userId, voteId, optionId)
           }
         } else {
-          result = await voteService.addOption(user_id, vote_id, option_id)
+          result = await voteService.addOption(userId, voteId, optionId)
         }
       }
-      const [voted] = await voteService.getVoteStatus(vote_id)
-      if (voteMap && voteMap[vote_id]) {
-        console.log(Object.entries(voteMap))
-        voteMap[vote_id].forEach(ws => {
+      const [voted] = await voteService.getVoteStatus(voteId)
+      if (voteId in voteMap) {
+        // console.log(Object.entries(voteMap))
+        voteMap[voteId].forEach(ws => {
           ws.send(JSON.stringify(voted))
         })
       }
@@ -69,4 +75,4 @@ class VoteController {
   }
 }
 
-export default new VoteController()
+export const voteController =  new VoteController()

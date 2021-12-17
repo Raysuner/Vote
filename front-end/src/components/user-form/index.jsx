@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom"
 import styled from "styled-components"
 
 import { useInput, useUser } from "src/utils/hooks"
-import { login, register } from "src/utils/request"
+import { login, register, request } from "src/utils/request"
 
 export default memo(function UserForm({ title }) {
   const history = useHistory()
@@ -23,22 +23,22 @@ export default memo(function UserForm({ title }) {
         password: password.value
       }
       if (titleRef.current === "登录") {
-        login(user)
+        request(login(user))
           .then((res) => {
             window.localStorage.setItem("user", JSON.stringify(res.data))
             update()
             history.goBack()
           })
           .catch((err) => {
-            alert(`登陆失败: ${err.response.data?.errorMsg}`)
+            alert(`登陆失败: ${err}`)
           })
       } else {
-        register(user)
+        request(register(user))
           .then((res) => {
             history.push("/login")
           })
           .catch((err) => {
-            alert(`注册失败: ${err.response.data?.errorMsg}`)
+            alert(`注册失败: ${err?.response.data?.errorMsg}`)
           })
       }
     },

@@ -1,24 +1,9 @@
-import { useContext, useCallback, useState, useMemo } from "react"
+import { useContext, useCallback, useState, useMemo, useEffect } from "react"
 import { useLocation } from "react-router-dom"
-
-// import axios from "axios"
 
 import { UserContext } from "../components/login-context"
 
-// axios.interceptors.request.use(config => {
-//   const user = window.localStorage.getItem("user")
-//   if (user) {
-//     let token = JSON.parse(user).token
-//     config.headers['Authorization'] = `Bearer ${token}`
-//   }
-//   return config
-// }, err => {
-//   if (axios.isAxiosError(err)) {
-//     console.error("it's a axios error")
-//   } else {
-//     console.error(err.message)
-//   }
-// })
+import { request } from "../utils/request"
 
 export function useInput(init = "") {
   const [value, setValue] = useState(init)
@@ -67,45 +52,39 @@ export function useQuery(param) {
   return search.get(param)
 }
 
-export function useAxios(config) {
+export function useAxios({url, method, data}) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState()
-  const [data, setData] = useState()
+  const [response, setResponse] = useState()
   const [count, setCount] = useState(0)
 
-  useEffect(() => {
-    const CancelToken = axios.CancelToken
-    const source = cancelToken.source()
-    const request = axios({
-      ...config,
-      cancelToken: source.token,
-      timeout: 5000
-    })
 
+  useEffect(() => {
     const fetchData = async () => {
       setError(null)
       setLoading(true)
       try {
-        const result = await axios({
-          ...config,
-          cancelToken: source.token,
-          timeout: 5000
-        })
-        setData(result)
+        const result = await request({url, method, data})
+        setResponse(result.data)
       } catch (err) {
-        setError(err)
+        setError(err.response.data)
+      } finally {
+        setLoading(false)
       }
-      setLoading(false)
     }
-
     fetchData()
+  }, [url, method, data, count])
 
-    const update = useCallback(() => {
-      setCount(count => count + 1)
-    }, [])
-  }, [config.url, count])
+  const update = useCallback(() => {
+    setCount(count => count + 1)
+  }, [])
 
-  return () => source.cancle()
+  return {
+    loading,
+    error,
+    response,
+    update
+  }
 }
 
 export function useUser() {

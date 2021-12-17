@@ -7,10 +7,10 @@ export const PUBLIC_KEY: Buffer = fs.readFileSync(path.resolve(__dirname, "keys/
 
 env.config()
 
-export const APP_PORT: string = process.env.APP_POST
-export const MYSQL_HOST: string = process.env.MYSQL_HOST
-export const MYSQL_PORT: string = process.env.MYSQL_PORT
-export const MYSQL_USER: string = process.env.MYSQL_USER
-export const MYSQL_PASSWORD: string = process.env.MYSQL_PASSWORD
-export const MYSQL_DATABASE: string = process.env.MYSQL_DATABASE
-export const MYSQL_LIMIT: string = process.env.MYSQL_LIMIT
+export const APP_PORT: string | undefined = process.env.APP_PORT
+export const MYSQL_HOST: string | undefined = process.env.MYSQL_HOST
+export const MYSQL_PORT: string | undefined = process.env.MYSQL_PORT
+export const MYSQL_USER: string | undefined = process.env.MYSQL_USER
+export const MYSQL_PASSWORD: string | undefined = process.env.MYSQL_PASSWORD
+export const MYSQL_DATABASE: string | undefined = process.env.MYSQL_DATABASE
+export const MYSQL_LIMIT: string | undefined = process.env.MYSQL_LIMIT

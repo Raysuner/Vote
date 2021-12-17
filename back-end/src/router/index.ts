@@ -6,8 +6,10 @@ export async function useAllRoutes() {
         if (file === "index.ts") {
             continue
         }
-        const router = require(`./${file}`)
+      const { router } = require(`./${file}`)
+        // @ts-ignore
         this.use(router.routes())
+        // @ts-ignore
         this.use(router.allowedMethods())
     }
 }
