@@ -5,7 +5,7 @@ import styled from "styled-components"
 
 import { getVotesByUser } from "src/utils/request"
 import { useAxios } from "src/utils/hooks"
-import WithCheckLogin from "src/utils/hoc.js"
+import withAuth from "src/utils/hoc.js"
 import AppHeader from "src/components/app-header"
 
 function Mine() {
@@ -31,7 +31,7 @@ function Mine() {
   )
 }
 
-export default WithCheckLogin(memo(Mine))
+export default withAuth(memo(Mine))
 
 const MineWrapper = styled.div`
   margin: 0 100px;

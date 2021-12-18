@@ -1,7 +1,7 @@
 import { useContext, useCallback, useState, useMemo, useEffect } from "react"
 import { useLocation } from "react-router-dom"
 
-import { UserContext } from "../components/login-context"
+import { LoginContext } from "../components/auth-provider"
 
 import { request } from "../utils/request"
 
@@ -65,9 +65,9 @@ export function useAxios({url, method, data}) {
       setLoading(true)
       try {
         const result = await request({url, method, data})
-        setResponse(result.data)
+        setResponse(result?.data)
       } catch (err) {
-        setError(err.response.data)
+        setError(err?.response?.data)
       } finally {
         setLoading(false)
       }
@@ -75,7 +75,7 @@ export function useAxios({url, method, data}) {
     fetchData()
   }, [url, method, data, count])
 
-  const update = useCallback(() => {
+  const reFetch = useCallback(() => {
     setCount(count => count + 1)
   }, [])
 
@@ -83,10 +83,14 @@ export function useAxios({url, method, data}) {
     loading,
     error,
     response,
-    update
+    reFetch
   }
 }
 
-export function useUser() {
-  return useContext(UserContext)
+export function useAuth() {
+  const context = useContext(LoginContext)
+  if (!context) {
+    throw new Error("Auth Failed")
+  }
+  return context
 }

@@ -3,14 +3,14 @@ import { renderRoutes } from "react-router-config"
 
 import { routes } from "./router"
 
-import LoginContext from "./components/login-context"
+import AuthProvider from "./components/auth-provider"
 
 function App() {
   return (
     <HashRouter>
-      <LoginContext>
+      <AuthProvider>
         <div className="App">{renderRoutes(routes)}</div>
-      </LoginContext>
+      </AuthProvider>
     </HashRouter>
   )
 }

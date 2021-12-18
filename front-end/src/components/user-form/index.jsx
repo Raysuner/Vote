@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom"
 
 import styled from "styled-components"
 
-import { useInput, useUser } from "src/utils/hooks"
+import { useInput, useAuth } from "src/utils/hooks"
 import { login, register, request } from "src/utils/request"
 
 export default memo(function UserForm({ title }) {
@@ -11,7 +11,7 @@ export default memo(function UserForm({ title }) {
   const name = useInput()
   const password = useInput()
   const titleRef = useRef("")
-  const { update } = useUser()
+  const { reFetch } = useAuth()
 
   titleRef.current = title
 
@@ -26,7 +26,7 @@ export default memo(function UserForm({ title }) {
         request(login(user))
           .then((res) => {
             window.localStorage.setItem("user", JSON.stringify(res.data))
-            update()
+            reFetch()
             history.goBack()
           })
           .catch((err) => {
@@ -42,7 +42,7 @@ export default memo(function UserForm({ title }) {
           })
       }
     },
-    [name.value, password.value, history, update]
+    [name.value, password.value, history, reFetch]
   )
 
   return (

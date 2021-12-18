@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom"
 import styled from "styled-components"
 
 import { useInput, useBoolInput, useArray, useQuery } from "src/utils/hooks"
-import WithCheckLogin from "../../utils/hoc"
+import withAuth from "../../utils/hoc"
 import { createVote } from "src/utils/request"
 
 function Create() {
@@ -70,6 +70,6 @@ function Create() {
   )
 }
 
-export default WithCheckLogin(memo(Create))
+export default withAuth(memo(Create))
 
 const CreacteWrapper = styled.div``

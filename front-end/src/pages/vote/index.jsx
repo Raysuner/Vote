@@ -5,14 +5,14 @@ import groupBy from "lodash/groupBy"
 import uniqBy from "lodash/uniqBy"
 import styled from "styled-components"
 
-import WithCheckLogin from "src/utils/hoc.js"
+import withAuth from "src/utils/hoc.js"
 import { useAxios } from "src/utils/hooks"
 import { getVoteByVoteId, voteOption, request } from "src/utils/request"
 import AppHeader from "src/components/app-header"
 
 function Vote({ user }) {
   const { id: voteId } = useParams()
-  const { response, update } = useAxios(getVoteByVoteId(voteId))
+  const { response, reFetch } = useAxios(getVoteByVoteId(voteId))
   const [wsVoted, setWsVoted] = useState()
 
   useEffect(() => {
@@ -26,13 +26,14 @@ function Vote({ user }) {
     const ws = new WebSocket(wsUrl)
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data)
+      console.log("ws data", data)
       setWsVoted(data)
     }
     return () => ws.close()
   }, [voteId])
 
   const handleSelect = (voteId, optionId) => {
-    request(voteOption(voteId, optionId)).then(() => update())
+    request(voteOption(voteId, optionId)).then(() => reFetch())
   }
 
   const httpVoted = response?.voted
@@ -111,7 +112,7 @@ function Vote({ user }) {
   )
 }
 
-export default WithCheckLogin(memo(Vote))
+export default withAuth(memo(Vote))
 
 const VoteWrapper = styled.div`
   margin: 0 100px;

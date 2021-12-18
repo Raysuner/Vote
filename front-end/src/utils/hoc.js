@@ -1,22 +1,22 @@
 import { memo } from "react"
 
-import { useUser } from "./hooks"
-import RequireLogin from "../pages/require-login"
+import Login from "../pages/login"
+import { useAuth } from "./hooks"
 
-export default function WithCheckLogin(Comp) {
-  function CheckLogin(props) {
-    const { loading, error, user } = useUser()
+export default function withAuth(Comp) {
+  function Auth(props) {
+    const { loading, error, user } = useAuth()
     if (loading) {
       return null
     }
     if (error) {
-      return <RequireLogin></RequireLogin>
+      return <Login></Login>
     }
     if (user) {
       return <Comp {...props} user={user}></Comp>
     }
   }
 
-  CheckLogin.displayName = "WithRequireLogin" + (Comp.displayName || Comp.name)
-  return memo(CheckLogin)
+  Auth.displayName = "WithAuth" + (Comp.displayName || Comp.name)
+  return memo(Auth)
 }

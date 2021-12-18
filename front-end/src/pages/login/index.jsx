@@ -2,11 +2,11 @@ import { memo, useEffect } from "react"
 import { useHistory } from "react-router"
 
 import UserForm from "src/components/user-form"
-import { useUser } from "src/utils/hooks"
+import { useAuth } from "src/utils/hooks"
 
 export default memo(function Login() {
   const history = useHistory()
-  const { user } = useUser()
+  const { user } = useAuth()
   useEffect(() => {
     if (user) {
       history.goBack()
