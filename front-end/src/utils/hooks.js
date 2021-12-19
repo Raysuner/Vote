@@ -68,7 +68,7 @@ export function useAxios(props) {
         const result = await request({url, method, data})
         setResponse(result?.data)
       } catch (err) {
-        setError(err?.response?.data)
+        setError(err?.response.data)
       } finally {
         setLoading(false)
       }
