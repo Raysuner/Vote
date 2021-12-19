@@ -7,12 +7,12 @@ import styled from "styled-components"
 
 import withAuth from "src/utils/hoc.js"
 import { useAxios } from "src/utils/hooks"
-import { getVoteByVoteId, voteOption, request } from "src/utils/request"
+import { getVoteByVoteId, voteOption, axiosInstance } from "src/utils/request"
 import AppHeader from "src/components/app-header"
 
 function Vote({ user }) {
   const { id: voteId } = useParams()
-  const { response, reFetch } = useAxios(getVoteByVoteId(voteId))
+  const { response, refetch } = useAxios(getVoteByVoteId(voteId))
   const [wsVoted, setWsVoted] = useState()
 
   useEffect(() => {
@@ -33,7 +33,7 @@ function Vote({ user }) {
   }, [voteId])
 
   const handleSelect = (voteId, optionId) => {
-    request(voteOption(voteId, optionId)).then(() => reFetch())
+    axiosInstance(voteOption(voteId, optionId)).then(() => refetch())
   }
 
   const httpVoted = response?.voted

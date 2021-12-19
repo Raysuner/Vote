@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom"
 
 import { LoginContext } from "../components/auth-provider"
 
-import { request } from "../utils/request"
+import { axiosInstance } from "../utils/request"
 
 export function useInput(init = "") {
   const [value, setValue] = useState(init)
@@ -65,7 +65,7 @@ export function useAxios(props) {
       setError(null)
       setLoading(true)
       try {
-        const result = await request({url, method, data})
+        const result = await axiosInstance({url, method, data})
         setResponse(result?.data)
       } catch (err) {
         setError(err?.response.data)
@@ -76,7 +76,7 @@ export function useAxios(props) {
     fetchData()
   }, [url, method, data, count])
 
-  const reFetch = useCallback(() => {
+  const refetch = useCallback(() => {
     setCount(count => count + 1)
   }, [])
 
@@ -84,7 +84,7 @@ export function useAxios(props) {
     loading,
     error,
     response,
-    reFetch
+    refetch
   }
 }
 

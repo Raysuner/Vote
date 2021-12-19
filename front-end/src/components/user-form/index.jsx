@@ -4,13 +4,13 @@ import { useHistory } from "react-router-dom"
 import styled from "styled-components"
 
 import { useInput, useAuth } from "src/utils/hooks"
-import { login, register, request } from "src/utils/request"
+import { login, register, axiosInstance } from "src/utils/request"
 
 export default memo(function UserForm(props) {
   const history = useHistory()
   const name = useInput()
   const password = useInput()
-  const { reFetch } = useAuth()
+  const { refetch } = useAuth()
   const { title } = props
 
   const handleSubmit = async (event) => {
@@ -20,17 +20,17 @@ export default memo(function UserForm(props) {
       password: password.value
     }
     if (title === "登录") {
-      request(login(user))
+      axiosInstance(login(user))
         .then((res) => {
           window.localStorage.setItem("user", JSON.stringify(res.data))
-          reFetch()
+          refetch()
           history.goBack()
         })
         .catch((err) => {
           alert(`登陆失败: ${err}`)
         })
     } else {
-      request(register(user))
+      axiosInstance(register(user))
         .then((res) => {
           history.push("/login")
         })

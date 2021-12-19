@@ -1,7 +1,7 @@
 import { memo, createContext } from "react"
 
-import { getLoginUser } from "src/utils/request"
-import { useAxios } from "src/utils/hooks"
+import { getLoginUser } from "../../utils/request"
+import { useAxios } from "../../utils/hooks"
 
 export const LoginContext = createContext()
 
@@ -10,10 +10,10 @@ export default memo(function AuthProvider({ children }) {
     loading,
     error,
     response: user,
-    reFetch
+    refetch
   } = useAxios(getLoginUser())
   return (
-    <LoginContext.Provider value={{ loading, error, user, reFetch }}>
+    <LoginContext.Provider value={{ loading, error, user, refetch }}>
       {children}
     </LoginContext.Provider>
   )
