@@ -52,11 +52,12 @@ export function useQuery(param) {
   return search.get(param)
 }
 
-export function useAxios({url, method, data}) {
+export function useAxios(props) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState()
   const [response, setResponse] = useState()
   const [count, setCount] = useState(0)
+  const {url, method, data} = props
 
 
   useEffect(() => {
