@@ -1,19 +1,19 @@
-import { memo, useMemo, useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
+import { memo, useMemo, useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
-import groupBy from "lodash/groupBy"
-import uniqBy from "lodash/uniqBy"
-import styled from "styled-components"
+import groupBy from "lodash/groupBy";
+import uniqBy from "lodash/uniqBy";
+import styled from "styled-components";
 
-import withAuth from "src/utils/hoc.js"
-import { useAxios } from "src/utils/hooks"
-import { getVoteByVoteId, voteOption, axiosInstance } from "src/utils/request"
-import AppHeader from "src/components/app-header"
+import withAuth from "src/utils/hoc.js";
+import { useAxios } from "src/utils/hooks";
+import { getVoteByVoteId, voteOption, axiosInstance } from "src/utils/request";
+import AppHeader from "src/components/app-header";
 
 function Vote({ user }) {
-  const { id: voteId } = useParams()
-  const { response, refetch } = useAxios(getVoteByVoteId(voteId))
-  const [wsVoted, setWsVoted] = useState()
+  const { id: voteId } = useParams();
+  const { response, refetch } = useAxios(getVoteByVoteId(voteId));
+  const [wsVoted, setWsVoted] = useState();
 
   useEffect(() => {
     // if (Date.now() > new Date(info.deadline).getTime()) {
@@ -21,44 +21,44 @@ function Vote({ user }) {
     // }
     const wsUrl = `${window.location.protocol.replace("http", "ws")}//${
       window.location.host
-    }/realtime/${voteId}`
+    }/realtime/${voteId}`;
 
-    const ws = new WebSocket(wsUrl)
+    const ws = new WebSocket(wsUrl);
     ws.onmessage = (event) => {
-      const data = JSON.parse(event.data)
-      console.log("ws data", data)
-      setWsVoted(data)
-    }
-    return () => ws.close()
-  }, [voteId])
+      const data = JSON.parse(event.data);
+      console.log("ws data", data);
+      setWsVoted(data);
+    };
+    return () => ws.close();
+  }, [voteId]);
 
   const handleSelect = (voteId, optionId) => {
-    axiosInstance(voteOption(voteId, optionId)).then(() => refetch())
-  }
+    axiosInstance(voteOption(voteId, optionId)).then(() => refetch());
+  };
 
-  const httpVoted = response?.voted
-  const voted = useMemo(() => wsVoted ?? httpVoted ?? [], [httpVoted, wsVoted])
+  const httpVoted = response?.voted;
+  const voted = useMemo(() => wsVoted ?? httpVoted ?? [], [httpVoted, wsVoted]);
 
   //通过option_id分组后的投票
-  const groupedVoted = useMemo(() => groupBy(voted, "optionId"), [voted])
+  const groupedVoted = useMemo(() => groupBy(voted, "optionId"), [voted]);
   //通过去重后的投票用户人数
-  const userCount = useMemo(() => uniqBy(voted, "userId").length, [voted])
+  const userCount = useMemo(() => uniqBy(voted, "userId").length, [voted]);
 
   // console.log("groupedVoted", groupedVoted)
   // console.log("userCount", userCount)
 
   // 当前选项的投票数
   const getOptionUsers = (optionId) => {
-    return groupedVoted[optionId] || []
-  }
+    return groupedVoted[optionId] || [];
+  };
 
-  const getVoteCount = (optionId) => getOptionUsers(optionId)?.length || 0
+  const getVoteCount = (optionId) => getOptionUsers(optionId)?.length || 0;
 
   // 当前选项投票占整个投票的百分比
   const getPercent = (voteCount, userCount) => {
-    if (userCount === 0) return 0
-    else return ((voteCount / userCount) * 100).toFixed(2)
-  }
+    if (userCount === 0) return 0;
+    else return ((voteCount / userCount) * 100).toFixed(2);
+  };
 
   // if (loading) {
   //   return "loading..."
@@ -99,20 +99,20 @@ function Vote({ user }) {
                         <span key={user.id} className="avatar">
                           {user.userId}
                         </span>
-                      )
+                      );
                     })}
                   </div>
                 </li>
-              )
+              );
             })}
         </ul>
         <div className="deadline">截止日期：{response?.info.deadline}</div>
       </div>
     </VoteWrapper>
-  )
+  );
 }
 
-export default withAuth(memo(Vote))
+export default withAuth(memo(Vote));
 
 const VoteWrapper = styled.div`
   margin: 0 100px;
@@ -158,4 +158,4 @@ const VoteWrapper = styled.div`
       }
     }
   }
-`
+`;

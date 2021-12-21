@@ -1,6 +1,6 @@
-import { memo } from "react"
+import { memo } from "react";
 
-import styled from "styled-components"
+import styled from "styled-components";
 
 export default memo(function AppHeader({ title }) {
   return (
@@ -8,8 +8,8 @@ export default memo(function AppHeader({ title }) {
       <i className="icon"></i>
       <div className="title">{title}</div>
     </AppHeaderWrapper>
-  )
-})
+  );
+});
 
 const AppHeaderWrapper = styled.header`
   margin-bottom: 30px;
@@ -18,4 +18,4 @@ const AppHeaderWrapper = styled.header`
     font-weight: 800;
     text-align: center;
   }
-`
+`;

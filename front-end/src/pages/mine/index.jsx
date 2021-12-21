@@ -1,18 +1,18 @@
-import { memo } from "react"
-import { NavLink } from "react-router-dom"
+import { memo } from "react";
+import { NavLink } from "react-router-dom";
 
-import styled from "styled-components"
+import styled from "styled-components";
 
-import { getVotesByUser } from "src/utils/request"
-import { useAxios } from "src/utils/hooks"
-import withAuth from "src/utils/hoc.js"
-import AppHeader from "src/components/app-header"
+import { getVotesByUser } from "src/utils/request";
+import { useAxios } from "src/utils/hooks";
+import withAuth from "src/utils/hoc.js";
+import AppHeader from "src/components/app-header";
 
 function Mine() {
-  const { loading, response } = useAxios(getVotesByUser()) // /api/vote
+  const { loading, response } = useAxios(getVotesByUser()); // /api/vote
 
   if (loading) {
-    return null
+    return null;
   }
 
   return (
@@ -24,14 +24,14 @@ function Mine() {
             <li key={item.id}>
               <NavLink to={"/vote/" + item.id}>{item.title}</NavLink>
             </li>
-          )
+          );
         })}
       </ul>
     </MineWrapper>
-  )
+  );
 }
 
-export default withAuth(memo(Mine))
+export default withAuth(memo(Mine));
 
 const MineWrapper = styled.div`
   margin: 0 100px;
@@ -49,4 +49,4 @@ const MineWrapper = styled.div`
       }
     }
   }
-`
+`;

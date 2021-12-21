@@ -1,18 +1,18 @@
-import { Redirect } from "react-router-dom"
+import { Redirect } from "react-router-dom";
 
-import Main from "../pages/main"
-import New from "../pages/new"
-import Mine from "../pages/mine"
-import Login from "../pages/login"
-import Register from "../pages/register"
-import Create from "../pages/create"
-import Vote from "../pages/vote"
+import Main from "../pages/main";
+import New from "../pages/new";
+import Mine from "../pages/mine";
+import Login from "../pages/login";
+import Register from "../pages/register";
+import Create from "../pages/create";
+import Vote from "../pages/vote";
 
 export const routes = [
   {
     path: "/",
     exact: true,
-    render: () => <Redirect to="/main/new" />
+    render: () => <Redirect to="/main/new" />,
   },
   {
     path: "/main",
@@ -21,32 +21,32 @@ export const routes = [
       {
         path: "/main",
         exact: true,
-        render: () => <Redirect to="/main/new" />
+        render: () => <Redirect to="/main/new" />,
       },
       {
         path: "/main/new",
-        component: New
+        component: New,
       },
       {
         path: "/main/mine",
-        component: Mine
-      }
-    ]
+        component: Mine,
+      },
+    ],
   },
   {
     path: "/login",
-    component: Login
+    component: Login,
   },
   {
     path: "/register",
-    component: Register
+    component: Register,
   },
   {
     path: "/create",
-    component: Create
+    component: Create,
   },
   {
     path: "/vote/:id",
-    component: Vote
-  }
-]
+    component: Vote,
+  },
+];

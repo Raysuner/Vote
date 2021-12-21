@@ -1,22 +1,22 @@
-import { memo } from "react"
+import { memo } from "react";
 
-import Login from "../pages/login"
-import { useAuth } from "./hooks"
+import Login from "../pages/login";
+import { useAuth } from "./hooks";
 
 export default function withAuth(Comp) {
   function Auth(props) {
-    const { loading, error, user } = useAuth()
+    const { loading, error, user } = useAuth();
     if (loading) {
-      return null
+      return null;
     }
     if (error) {
-      return <Login></Login>
+      return <Login></Login>;
     }
     if (user) {
-      return <Comp {...props} user={user}></Comp>
+      return <Comp {...props} user={user}></Comp>;
     }
   }
 
-  Auth.displayName = "WithAuth" + (Comp.displayName || Comp.name)
-  return memo(Auth)
+  Auth.displayName = "WithAuth" + (Comp.displayName || Comp.name);
+  return memo(Auth);
 }

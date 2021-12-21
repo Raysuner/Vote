@@ -1,8 +1,8 @@
-import { memo } from "react"
-import { NavLink } from "react-router-dom"
-import { renderRoutes } from "react-router-config"
+import { memo } from "react";
+import { NavLink } from "react-router-dom";
+import { renderRoutes } from "react-router-config";
 
-import styled from "styled-components"
+import styled from "styled-components";
 
 export default memo(function Main({ route }) {
   return (
@@ -13,8 +13,8 @@ export default memo(function Main({ route }) {
         <NavLink to="/main/mine">我的</NavLink>
       </div>
     </MainWrapper>
-  )
-})
+  );
+});
 
 const MainWrapper = styled.div`
   margin: 0 auto;
@@ -25,4 +25,4 @@ const MainWrapper = styled.div`
       margin: 0 10px;
     }
   }
-`
+`;

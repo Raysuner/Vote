@@ -1,10 +1,9 @@
-import { memo } from "react"
-import { Link } from "react-router-dom"
+import { memo } from "react";
+import { Link } from "react-router-dom";
 
-import styled from "styled-components"
+import styled from "styled-components";
 
-import AppHeader from "src/components/app-header"
-
+import AppHeader from "src/components/app-header";
 
 function New() {
   return (
@@ -17,9 +16,9 @@ function New() {
         <Link to="/create?multiple=1">多选</Link>
       </div>
     </NewWrapper>
-  )
+  );
 }
 
-export default memo(New)
+export default memo(New);
 
-const NewWrapper = styled.div``
+const NewWrapper = styled.div``;

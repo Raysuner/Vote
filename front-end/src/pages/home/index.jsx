@@ -1,5 +1,5 @@
-import { memo } from "react"
+import { memo } from "react";
 
 export default memo(function Home() {
-  return <div></div>
-})
+  return <div></div>;
+});

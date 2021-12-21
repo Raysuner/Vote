@@ -1,21 +1,21 @@
-import { memo } from "react"
-import { useHistory } from "react-router-dom"
+import { memo } from "react";
+import { useHistory } from "react-router-dom";
 
-import styled from "styled-components"
+import styled from "styled-components";
 
-import { useInput, useBoolInput, useArray, useQuery } from "src/utils/hooks"
-import withAuth from "../../utils/hoc"
-import { createVote } from "src/utils/request"
+import { useInput, useBoolInput, useArray, useQuery } from "src/utils/hooks";
+import withAuth from "../../utils/hoc";
+import { createVote } from "src/utils/request";
 
 function Create() {
-  const history = useHistory()
+  const history = useHistory();
 
-  const { array, add, remove, modify } = useArray()
-  const title = useInput()
-  const desc = useInput()
-  const deadline = useInput()
-  const anonymous = useBoolInput()
-  const queryParam = useQuery("multiple")
+  const { array, add, remove, modify } = useArray();
+  const title = useInput();
+  const desc = useInput();
+  const deadline = useInput();
+  const anonymous = useBoolInput();
+  const queryParam = useQuery("multiple");
 
   const create = async () => {
     const voteInfo = {
@@ -24,15 +24,15 @@ function Create() {
       deadline: deadline.value,
       anonymous: anonymous.checked,
       multiple: queryParam === "1" ? true : false,
-      options: array
-    }
+      options: array,
+    };
     try {
-      await createVote(voteInfo)
-      history.push("/main/mine")
+      await createVote(voteInfo);
+      history.push("/main/mine");
     } catch (error) {
-      console.error("创建投票失败")
+      console.error("创建投票失败");
     }
-  }
+  };
 
   return (
     <CreacteWrapper>
@@ -67,9 +67,9 @@ function Create() {
         <button onClick={create}>创建投票</button>
       </div>
     </CreacteWrapper>
-  )
+  );
 }
 
-export default withAuth(memo(Create))
+export default withAuth(memo(Create));
 
-const CreacteWrapper = styled.div``
+const CreacteWrapper = styled.div``;
