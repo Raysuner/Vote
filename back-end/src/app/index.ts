@@ -1,12 +1,12 @@
-import Koa from "koa"
-import bodyParser from "koa-bodyparser"
-import { useAllRoutes } from "../router/index"
-import { errorHandler } from "./error-handler"
+import Koa from "koa";
+import bodyParser from "koa-bodyparser";
+import { useAllRoutes } from "../router/index";
+import { errorHandler } from "./error-handler";
 
-export const app:Koa = new Koa()
+export const app: Koa = new Koa();
 
-app.use(bodyParser())
+app.use(bodyParser());
 
-useAllRoutes.call(app)
+useAllRoutes.call(app);
 
-app.on("error", errorHandler)
+app.on("error", errorHandler);
