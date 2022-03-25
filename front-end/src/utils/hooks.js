@@ -1,7 +1,7 @@
 import { useContext, useCallback, useState, useMemo, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-import { LoginContext } from "../components/auth-provider";
+import { LoginContext } from "../components/AuthProvider";
 
 import { axiosInstance } from "../utils/request";
 
